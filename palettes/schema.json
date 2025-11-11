@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cemacmillan.github.io/open-license-library/palettes/schema.json",
+  "$id": "https://cemacmillan.github.io/bibliochromatiqueN/palettes/schema.json",
   "title": "Color Palette",
   "type": "object",
   "required": ["name", "slug", "description", "version", "colors"],
