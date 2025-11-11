@@ -1,0 +1,85 @@
+{
+  "$schema": "./schema.json",
+  "name": "Opium Den",
+  "slug": "opium-den",
+  "description": "A palette of imagined-location inspired colours for digital publishing.",
+  "version": "1.0.0",
+  "metadata": {
+    "created": "2025-11-11",
+    "creator": "D. I. Lettante",
+    "author": "C.E.M.",
+    "notes": "Designed for contemplative, low-glare reading experiences.",
+    "intent": "Slow-reading, contemplative layouts with historical fiction undertones.",
+    "mood": ["jade", "poppy", "smoke", "aged silk"],
+    "light_gamma": 2.0,
+    "contrast_ratio": "AAA",
+    "license": "CC0-1.0",
+    "keywords": ["literary", "accessible", "non-semantic", "noir", "period drama"]
+  },
+  "colors": [
+    {
+      "id": "c0",
+      "name": "Aged Silk",
+      "role": "paper",
+      "hex": "#E6DFCC",
+      "rgb": [230, 223, 204],
+      "description": "light, warm-neutral base; paper, worn silk glove"
+    },
+    {
+      "id": "c1",
+      "name": "Ink Grey",
+      "role": "ink",
+      "hex": "#32312F",
+      "rgb": [50, 49, 47],
+      "description": "main text tone; gallo-roman ink dry on parchment"
+    },
+    {
+      "id": "c2",
+      "name": "Curtain Jade",
+      "role": "accent",
+      "hex": "#6D8774",
+      "rgb": [109, 135, 116],
+      "description": "waxy-leaf green, low saturation."
+    },
+    {
+      "id": "c3",
+      "name": "Hidden Bloom",
+      "role": "accent",
+      "hex": "#B86863",
+      "rgb": [184, 104, 99],
+      "description": "poppy petal in shade; muted coral-rose"
+    },
+    {
+      "id": "c4",
+      "name": "Smoke Wood",
+      "role": "highlight",
+      "hex": "#5C4639",
+      "rgb": [92, 70, 57],
+      "description": "Brown of lacquered teak touched by hands."
+    },
+    {
+      "id": "c5",
+      "name": "Celadon Mist",
+      "role": "surface",
+      "hex": "#C8CEC3",
+      "rgb": [200, 206, 195],
+      "description": "faint green-grey highlight, alternate background."
+    },
+    {
+      "id": "c6",
+      "name": "Pearl Ash",
+      "role": "accent",
+      "hex": "#D7DAD7",
+      "rgb": [215, 218, 215],
+      "description": "off-white with a blue note; UI divider / border"
+    },
+    {
+      "id": "c7",
+      "name": "Night Opium",
+      "role": "surface",
+      "hex": "#1B201C",
+      "rgb": [27, 32, 28],
+      "description": "deepest field color for dark mode"
+    }
+  ]
+}

@@ -1,0 +1,317 @@
+#!/usr/bin/env python3
+"""Generate colour palette preview pages from JSON definitions."""
+
+from __future__ import annotations
+
+import argparse
+import html
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+from string import Template
+from textwrap import dedent
+
+ROOT = Path(__file__).resolve().parents[1]
+PALETTE_DIR = ROOT / "palettes"
+TEMPLATE_PATH = ROOT / "templates" / "palette.html"
+CSS_PATH = ROOT / "css" / "palette.css"
+
+ROLE_LABELS = {
+    "paper": "Paper",
+    "ink": "Ink",
+    "surface": "Surface",
+    "accent": "Accent",
+    "highlight": "Highlight",
+    "support": "Support",
+    "interaction": "Interaction",
+    "custom": "Custom",
+}
+
+
+class PaletteError(RuntimeError):
+    """Raised when palette generation fails."""
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate an HTML palette preview from palettes/<name>.json",
+    )
+    parser.add_argument(
+        "slug",
+        help="Palette slug (matches palettes/<slug>.json).",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        type=Path,
+        help="Optional output filepath. Defaults to palettes/<slug>.html",
+    )
+    return parser.parse_args()
+
+
+def load_palette(slug: str) -> dict:
+    path = PALETTE_DIR / f"{slug}.json"
+    if not path.exists():
+        raise PaletteError(f"Palette definition not found: {path}")
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:  # pragma: no cover - CLI tool
+        raise PaletteError(f"Invalid JSON in {path}: {exc}") from exc
+
+
+def load_template() -> Template:
+    if not TEMPLATE_PATH.exists():
+        raise PaletteError(f"Template missing: {TEMPLATE_PATH}")
+    return Template(TEMPLATE_PATH.read_text(encoding="utf-8"))
+
+
+def esc(value: str | None) -> str:
+    return html.escape(str(value), quote=True) if value is not None else ""
+
+
+def indent(text: str, spaces: int = 2) -> str:
+    pad = " " * spaces
+    return "\n".join(pad + line if line else line for line in text.splitlines())
+
+
+def normalise_role(value: str | None) -> str:
+    if not value:
+        return "Accent"
+    return ROLE_LABELS.get(value.lower(), value.title())
+
+
+def rgb_string(components: list[int]) -> str:
+    return ", ".join(str(component) for component in components[:3])
+
+
+def generate_wheel_markup(colours: list[dict]) -> str:
+    slices = []
+    count = max(len(colours), 1)
+    step = 360 / count
+    for index, colour in enumerate(colours):
+        angle = (index * step) - 90  # Start at top
+        name = esc(colour["name"])
+        role = esc(normalise_role(colour.get("role")))
+        hex_code = esc(colour["hex"])
+        rgb_code = esc(rgb_string(colour["rgb"]))
+        swatch = dedent(
+            f"""
+            <div class=\"swatch\" style=\"--angle: {angle:.4f}deg; --color: {hex_code}\">
+              <div class=\"swatch-info\">
+                <strong>{name}</strong>
+                <span class=\"role\">{role}</span>
+                <code>HEX {hex_code}</code>
+                <code>RGB {rgb_code}</code>
+              </div>
+            </div>
+            """
+        ).strip()
+        slices.append(swatch)
+    return "\n          ".join(slices)
+
+
+def generate_core_markup(colours: list[dict]) -> str:
+    primary_roles = {"paper", "ink"}
+    cards = []
+    for colour in colours:
+        role = (colour.get("role") or "").lower()
+        if role not in primary_roles:
+            continue
+        name = esc(colour["name"])
+        role_label = esc(normalise_role(role))
+        hex_code = esc(colour["hex"])
+        rgb_code = esc(rgb_string(colour["rgb"]))
+        description = esc((colour.get("description") or "").strip())
+        description_html = f"<p>{description}</p>" if description else ""
+        card = dedent(
+            f"""
+            <article class=\"tone-card\">
+              <div class=\"swatch-chip\" style=\"background: {hex_code};\"></div>
+              <strong>{name}</strong>
+              <span class=\"role\">{role_label}</span>
+              <code>HEX {hex_code}</code>
+              <code>RGB {rgb_code}</code>
+              {description_html}
+            </article>
+            """
+        ).strip()
+        cards.append(card)
+    if not cards:
+        return "<p>No designated ink/paper colours found.</p>"
+    return "\n          ".join(cards)
+
+
+def generate_table_rows(colours: list[dict]) -> str:
+    rows = []
+    for colour in colours:
+        description = esc((colour.get("description") or "").strip())
+        role_label = esc(normalise_role(colour.get("role")))
+        name = esc(colour["name"])
+        colour_id = esc(colour["id"])
+        hex_code = esc(colour["hex"])
+        rgb_code = esc(rgb_string(colour["rgb"]))
+        preview_label = esc(f"{colour['name']} preview")
+        row = dedent(
+            f"""
+            <tr>
+              <td>{colour_id}</td>
+              <td>{name}</td>
+              <td>{role_label}</td>
+              <td><code>{hex_code}</code></td>
+              <td><code>{rgb_code}</code></td>
+              <td><span class=\"chip\" style=\"background: {hex_code};\" aria-label=\"{preview_label}\"></span></td>
+              <td>{description}</td>
+            </tr>
+            """
+        ).strip()
+        rows.append(row)
+    return "\n            ".join(rows)
+
+
+def first_colour_with_role(colours: list[dict], role: str, default: str = "#f8f8f6") -> str:
+    for colour in colours:
+        if (colour.get("role") or "").lower() == role.lower():
+            return colour["hex"]
+    return default
+
+
+def build_source_markup(metadata: dict | None) -> str:
+    if not metadata:
+        return ""
+    source = metadata.get("source")
+    if not source:
+        return ""
+    href = esc(source)
+    label = esc(source)
+    return f"<span><strong>Source:</strong> <a href=\"{href}\">{label}</a></span>"
+
+
+def build_tag_group(label: str, items: list[str] | None, category: str) -> str:
+    if not items:
+        return ""
+    safe_category = esc(category)
+    tags = "".join(
+        f'<span class="tag" data-category="{safe_category}" role="listitem">{esc(item)}</span>'
+        for item in items
+    )
+    heading = f'<span class="tag tag-heading" aria-hidden="true">{esc(label)}</span>'
+    return (
+        f'<div class="meta-tags" role="list" aria-label="{esc(label)} descriptors">\n'
+        f"  {heading}{tags}\n"
+        "</div>"
+    )
+
+
+def build_attribute_items(metadata: dict) -> str:
+    items = []
+    if (contrast := metadata.get("contrast_ratio")):
+        items.append(("Contrast", contrast))
+    if (gamma := metadata.get("light_gamma")) is not None:
+        try:
+            gamma_str = f"{float(gamma):.2f}"
+        except (TypeError, ValueError):
+            gamma_str = str(gamma)
+        items.append(("Light Gamma", gamma_str))
+    if (license_id := metadata.get("license")):
+        items.append(("License", license_id))
+    if not items:
+        return ""
+    lines = []
+    for label, value in items:
+        lines.append(f"<dt>{esc(label)}</dt>")
+        lines.append(f"<dd>{esc(value)}</dd>")
+    return "\n".join(lines)
+
+
+def build_context_markup(metadata: dict | None) -> str:
+    if not metadata:
+        return ""
+    blocks: list[str] = []
+    if intent := metadata.get("intent"):
+        blocks.append(f'<p class="intent">{esc(intent)}</p>')
+    tag_sections = [
+        build_tag_group("Mood", metadata.get("mood"), "mood"),
+        build_tag_group("Keywords", metadata.get("keywords"), "keyword"),
+    ]
+    for section in tag_sections:
+        if section:
+            blocks.append(section)
+
+    attribute_items = build_attribute_items(metadata)
+    if attribute_items:
+        blocks.append(
+            '<dl class="meta-attributes">\n'
+            f"{attribute_items}\n"
+            "</dl>"
+        )
+
+    if notes := metadata.get("notes"):
+        blocks.append(f'<p class="notes">{esc(notes)}</p>')
+
+    if not blocks:
+        return ""
+    block_lines = [indent(block) for block in blocks]
+    block_html = "\n".join(block_lines)
+    return (
+        '<section class="palette-context" aria-label="Palette metadata">\n'
+        f"{block_html}\n"
+        "</section>"
+    )
+
+
+def render_page(slug: str, palette: dict) -> str:
+    colours = palette.get("colors", [])
+    template = load_template()
+    metadata = palette.get("metadata", {})
+    created = esc(metadata.get("created", "—"))
+    author = esc(metadata.get("author") or metadata.get("creator") or "Unknown")
+    lead = esc(palette.get("description", ""))
+    if not colours:
+        raise PaletteError(f"Palette '{slug}' has no colours defined.")
+
+    substitutions = {
+        "page_title": esc(f"{palette['name']} Colour Palette"),
+        "page_description": lead,
+        "page_background": esc(first_colour_with_role(colours, "paper")),
+        "heading": esc(palette["name"]),
+        "lead": lead,
+        "version": esc(palette.get("version", "0.0.0")),
+        "created": created,
+        "author": author,
+        "source_markup": build_source_markup(metadata),
+        "context_markup": build_context_markup(metadata),
+        "wheel_markup": generate_wheel_markup(colours),
+        "core_markup": generate_core_markup(colours),
+        "table_rows": generate_table_rows(colours),
+        "generated_on": esc(datetime.now().astimezone().isoformat(timespec="minutes")),
+        "slug": esc(slug),
+    }
+    return template.substitute(substitutions)
+
+
+def ensure_prerequisites() -> None:
+    missing = [path for path in (PALETTE_DIR, TEMPLATE_PATH, CSS_PATH) if not path.exists()]
+    if missing:
+        formatted = "\n".join(str(item) for item in missing)
+        raise PaletteError(f"Missing required files:\n{formatted}")
+
+
+def main() -> int:
+    args = parse_args()
+    try:
+        ensure_prerequisites()
+        palette = load_palette(args.slug)
+        html = render_page(args.slug, palette)
+        output_path = (args.output or (PALETTE_DIR / f"{args.slug}.html")).resolve()
+        output_path.write_text(html, encoding="utf-8")
+        rel_path = output_path.relative_to(ROOT)
+        print(f"✓ Generated {rel_path}")
+        return 0
+    except PaletteError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":  # pragma: no cover - CLI entry
+    raise SystemExit(main())

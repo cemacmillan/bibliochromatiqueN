@@ -1,0 +1,291 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: clamp(2rem, 4vw, 4rem);
+  background: var(--page-bg, #f8f8f6);
+  color: #1f1f1d;
+}
+
+main {
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 2rem 0 1rem;
+}
+
+p {
+  max-width: 60ch;
+}
+
+.palette-meta {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #3d403f;
+}
+
+.palette-context {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0 2.5rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.palette-context p {
+  margin: 0;
+}
+
+.meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.meta-tags .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #353735;
+  font-weight: 600;
+}
+
+.meta-tags .tag.tag-heading {
+  background: rgba(0, 0, 0, 0.12);
+  color: #1f1f1d;
+}
+
+.meta-tags .tag svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.meta-attributes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+}
+
+.meta-attributes dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b6e6d;
+  margin: 0 0 0.15rem;
+}
+
+.meta-attributes dd {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.palette-context .notes {
+  font-size: 0.9rem;
+  color: #4b4e4d;
+}
+
+.palette-wheel-wrapper {
+  display: grid;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.palette-wheel {
+  position: relative;
+  width: min(32rem, 80vw);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.04), transparent 55%);
+}
+
+.palette-wheel::after {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.palette-wheel .swatch {
+  --angle: 0deg;
+  --color: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 50%;
+  transform: rotate(var(--angle));
+  width: calc(50% - 2rem);
+  padding: 0.35rem 0;
+}
+
+.palette-wheel .swatch::before {
+  content: "";
+  display: block;
+  height: clamp(2.75rem, 7vw, 3.6rem);
+  border-radius: 999px;
+  background: var(--color);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.palette-wheel .swatch .swatch-info {
+  position: absolute;
+  left: 105%;
+  top: 50%;
+  transform: translateY(-50%) rotate(calc(-1 * var(--angle)));
+  transform-origin: left center;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.6rem;
+  min-width: 10rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.palette-wheel .swatch strong {
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.palette-wheel .swatch code {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: baseline;
+  font-size: 0.8rem;
+  color: #585b5a;
+}
+
+.palette-wheel .swatch code + code {
+  margin-left: 0.5rem;
+}
+
+.palette-wheel .swatch .role {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b6e6d;
+}
+
+.core-tones {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  margin-top: 3rem;
+}
+
+.core-tones .tone-card {
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.core-tones .tone-card .swatch-chip {
+  height: 3rem;
+  border-radius: 0.8rem;
+  margin-bottom: 0.75rem;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.core-tones .tone-card strong {
+  font-size: 0.95rem;
+  display: block;
+}
+
+.core-tones .tone-card code {
+  font-size: 0.8rem;
+  color: #585b5a;
+}
+
+.color-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+
+.color-table thead {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.color-table th,
+.color-table td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.color-table tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.color-table .chip {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+footer {
+  margin-top: 4rem;
+  font-size: 0.8rem;
+  color: #646766;
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .palette-wheel .swatch {
+    width: calc(50% - 1.2rem);
+  }
+
+  .palette-wheel .swatch::before {
+    height: clamp(2.25rem, 8vw, 3rem);
+  }
+
+  .palette-wheel .swatch .swatch-info {
+    min-width: 8.5rem;
+    padding: 0.3rem 0.5rem;
+  }
+}

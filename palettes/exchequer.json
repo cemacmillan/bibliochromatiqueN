@@ -1,0 +1,84 @@
+{
+  "$schema": "./schema.json",
+  "name": "Exchequer",
+  "slug": "exchequer",
+  "description": "Ledger-inspired earth tones for science-and-art publishing contexts.",
+  "version": "1.0.0",
+  "metadata": {
+    "created": "2025-11-11",
+    "creator": "Open License Library",
+    "notes": "Designed for accessible digital documents that echo archival ledgers.",
+    "intent": "Ledger-friendly palette for science-and-art publications and documentation sites.",
+    "mood": ["ledger", "brass", "archive", "calm"],
+    "light_gamma": 1.9,
+    "contrast_ratio": "AAA",
+    "license": "CC0-1.0",
+    "keywords": ["scientific", "editorial", "ledger", "heritage", "accessible"]
+  },
+  "colors": [
+    {
+      "id": "c0",
+      "name": "Ledger Paper",
+      "role": "paper",
+      "hex": "#D8D5CF",
+      "rgb": [216, 213, 207],
+      "description": "Warm stone-grey; principal background tone."
+    },
+    {
+      "id": "c1",
+      "name": "Graphite Ink",
+      "role": "ink",
+      "hex": "#2E3032",
+      "rgb": [46, 48, 50],
+      "description": "Neutral-cool text tone."
+    },
+    {
+      "id": "c2",
+      "name": "Oxide Red",
+      "role": "accent",
+      "hex": "#9B5E52",
+      "rgb": [155, 94, 82],
+      "description": "Desaturated outdoor red paint after decades."
+    },
+    {
+      "id": "c3",
+      "name": "Aomidori",
+      "role": "accent",
+      "hex": "#6F8884",
+      "rgb": [111, 136, 132],
+      "description": "Blue-green halfway to grey; calm accent."
+    },
+    {
+      "id": "c4",
+      "name": "Brass Patina",
+      "role": "highlight",
+      "hex": "#A39A74",
+      "rgb": [163, 154, 116],
+      "description": "Muted yellow-olive, low-saturation highlight."
+    },
+    {
+      "id": "c5",
+      "name": "Stone Tile",
+      "role": "surface",
+      "hex": "#CAC7C1",
+      "rgb": [202, 199, 193],
+      "description": "Table row alternate; slightly cooler than Ledger Paper."
+    },
+    {
+      "id": "c6",
+      "name": "Exposed Wood",
+      "role": "accent",
+      "hex": "#725D4E",
+      "rgb": [114, 93, 78],
+      "description": "Soft brown, human-contact gloss."
+    },
+    {
+      "id": "c7",
+      "name": "Night Ledger",
+      "role": "surface",
+      "hex": "#1E2322",
+      "rgb": [30, 35, 34],
+      "description": "Dark-mode field; deep greenish-black."
+    }
+  ]
+}

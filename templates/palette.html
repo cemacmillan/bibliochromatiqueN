@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>${page_title}</title>
+    <meta name="description" content="${page_description}" />
+    <link rel="stylesheet" href="../css/palette.css" />
+  </head>
+  <body style="--page-bg: ${page_background};">
+    <main>
+      <header>
+        <h1>${heading}</h1>
+        <p>${lead}</p>
+        <div class="palette-meta">
+          <span><strong>Version:</strong> ${version}</span>
+          <span><strong>Created:</strong> ${created}</span>
+          <span><strong>Author:</strong> ${author}</span>
+          ${source_markup}
+        </div>
+      </header>
+
+      ${context_markup}
+
+      <section class="palette-wheel-wrapper">
+        <div class="palette-wheel" aria-label="Peacock wheel of ${heading} colours">
+          ${wheel_markup}
+        </div>
+        <div class="core-tones" aria-label="Key ink and paper colours">
+          ${core_markup}
+        </div>
+      </section>
+
+      <section aria-label="Colour reference table">
+        <h2>Colour Reference</h2>
+        <table class="color-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Role</th>
+              <th scope="col">HEX</th>
+              <th scope="col">RGB</th>
+              <th scope="col">Preview</th>
+              <th scope="col">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${table_rows}
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        Generated on ${generated_on} by <code>scripts/generate_palette</code> from <code>palettes/${slug}.json</code>.
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cemacmillan.github.io/open-license-library/palettes/schema.json",
+  "title": "Color Palette",
+  "type": "object",
+  "required": ["name", "slug", "description", "version", "colors"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-friendly palette name."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "URL-safe identifier for the palette."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short summary of palette intent."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version string (MAJOR.MINOR.PATCH)."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created": {
+          "type": "string",
+          "format": "date",
+          "description": "Palette creation date (ISO-8601)."
+        },
+        "creator": {
+          "type": "string",
+          "description": "Individual or organisation that authored the palette."
+        },
+        "author": {
+          "type": "string",
+          "description": "Display author credit (overrides creator when present)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional background information about the palette."
+        },
+        "source": {
+          "type": "string",
+          "description": "Reference URL or citation for the palette inspiration."
+        },
+        "intent": {
+          "type": "string",
+          "description": "Short plain-language statement describing when to use the palette."
+        },
+        "mood": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "Descriptors that capture the emotional tone or inspiration keywords."
+        },
+        "light_gamma": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Suggested gamma for light rendering contexts."
+        },
+        "contrast_ratio": {
+          "type": "string",
+          "pattern": "^(AAA|AA|AA\+|[0-9]+(\.[0-9]+)?:1)$",
+          "description": "Accessibility target, e.g. AAA or 7:1."
+        },
+        "license": {
+          "type": "string",
+          "description": "Usage license for the palette (SPDX identifier or similar)."
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "Search-friendly keywords describing the palette."
+        }
+      }
+    },
+    "colors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "hex", "rgb"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^c[0-9]+$",
+            "description": "Internal identifier (c0, c1, ...)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the colour."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "ink",
+              "surface",
+              "accent",
+              "highlight",
+              "support",
+              "interaction",
+              "custom"
+            ],
+            "description": "Functional role of the colour within the system."
+          },
+          "hex": {
+            "type": "string",
+            "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+            "description": "Hexadecimal representation of the colour."
+          },
+          "rgb": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "RGB components in the 0-255 range."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable note describing the colour."
+          },
+          "contrastSample": {
+            "type": "string",
+            "description": "Optional hex colour used to check contrast combinations."
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
