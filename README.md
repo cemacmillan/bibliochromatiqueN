@@ -11,10 +11,14 @@ Born under the Antitrope project, this library exists to preserve the craft of c
 
 ## ✨ Purpose
 
-- Provide **open, reproducible color schemes** that respect human perception and accessibility.  
-- Encourage **slow, deliberate design** that allows the reader or viewer to think before acting.  
-- Protect artists from unintended consequences through ethical licensing (`licenseRef:Zhsbsab0` and its `-N` variants).  
-- Document how each palette came to exist — its dream, its reasoning, its conversation.
+- Provide **open, reproducible color schemes** that respect human perception and accessibility, which may be freely used without acknowledgement, entailment, etc.
+- Protect artists from unintended consequences through ethical licensing (`licenseRef:Zhsbsab0` and its `-N` variants).
+- Sometimes a project simply requires an unbalanced color schema, which cannot be found in a book or list. Define your colors, give them names, test, publish via library.
+- Encourage **slow, deliberate design** that allows the reader or viewer to think before acting.
+- Align with UX patterns which do not rely on semantic color which is proven scientifically to impact how the user will interact with a site.
+- Does not begin from time-honored patterns such as Solarized (but see our Acknowledgments below). The first palette which gave the project its motive force, emerged entirely from a dream.
+- Document how each palette came to exist — its dream, its reasoning, its conversation. The well-defined palette, distinct yet having all that is required and that alone, is itself a work of art that may be used to help produce art.
+- Permanent links to color and pallete allow for a legible sign-off process with a scientifically-defined color object. No fading, a URI-provided canonical reference color reproducable anywhere and referencable by library catalogue.
 
 ---
 
@@ -25,7 +29,7 @@ A palette is therefore both:
 
 1. **A narrative** — the story or constraint that generated it.  
 2. **A formula** — a deterministic set of color values reproducible anywhere that hexadecimal endures.
-
+3. **A reference** - a catalog object, the permanent URI which leads to the generated reference color or palette.
 You may use these palettes in digital or printed works, interfaces, games, or research environments,  
 provided you follow the license terms attached to each.
 
@@ -109,7 +113,8 @@ This library asks that you employ it consciously and with care.
 
 Every palette here is free to use but not free of meaning:
 each carries the principle that art may show, but never enforce.
-The -N suffix explicitly disclaims ideological endorsement.
+The -N suffix attached to any of our own licenses explicitly disclaims ideological endorsement.
+The -S suffix 
 
 ---
 
@@ -125,8 +130,11 @@ New palettes will follow the same metadata format for predictable generation and
 
 ## 🧭 Acknowledgements
 
-The project honors those who taught us to see color beyond physics — to read it as memory and moral act.
+The project honors those who taught us to see color beyond physics — to read it as memory and moral act:
 The initial “N.” stands for one such teacher, remembered here not by name but by perception.
+Every artist or designer from the pre-digital world who has struggled to adapt, and complained to us in our capacity as friend who has the keys to compute and knowledge to use it.
+Whoever it was
+We specifically recognize Ethan Schoonover, the Solarized schema, and the literature which describes its evolution as a fundamental inspiration for this project.
 
 ---
 
